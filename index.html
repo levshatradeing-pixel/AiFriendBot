@@ -34,7 +34,9 @@
       margin-bottom: 4px;
       opacity: 0.9;
     }
-    select, input, textarea {
+    select,
+    input,
+    textarea {
       border-radius: 8px;
       border: none;
       padding: 8px 10px;
@@ -46,7 +48,7 @@
     textarea {
       resize: vertical;
     }
-    button {
+    button.main {
       width: 100%;
       margin-top: 16px;
       padding: 10px 14px;
@@ -68,6 +70,36 @@
       color: #ff6b6b;
       margin-top: 10px;
       min-height: 16px;
+    }
+
+    /* Чипы-кнопки для мультивыбора */
+    .chip-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 4px;
+    }
+    .chip {
+      border: 1px solid #2b8cff;
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 13px;
+      background: #1b1c23;
+      color: #d0d0ff;
+      cursor: pointer;
+      user-select: none;
+      flex: 0 1 calc(50% - 8px); /* примерно 2 в ряд на мобиле */
+      text-align: center;
+      box-sizing: border-box;
+    }
+    @media (min-width: 480px) {
+      .chip {
+        flex: 0 1 calc(33.33% - 8px); /* на чуть больших можно 3 в ряд */
+      }
+    }
+    .chip.selected {
+      background: #2b8cff;
+      color: #fff;
     }
   </style>
 </head>
@@ -111,8 +143,10 @@
       <label>Ethnicity</label>
       <select id="ethnicity">
         <option value="caucasian">Caucasian</option>
+        <option value="european">European</option>
         <option value="latina">Latina</option>
         <option value="asian">Asian</option>
+        <option value="indian">Indian</option>
         <option value="arab">Arab</option>
         <option value="black">Black / Afro</option>
       </select>
@@ -180,8 +214,10 @@
 
     <div class="field">
       <label>Appearance note (optional)</label>
-      <textarea id="appearance_note" rows="3"
-        placeholder="Optional: Long dark hair, soft smile, natural makeup..."></textarea>
+      <textarea
+        id="appearance_note"
+        rows="3"
+        placeholder="Optional: Long dark hair, soft smile, natural makeup."></textarea>
     </div>
 
     <!-- БЛОК 3: личность -->
@@ -189,73 +225,79 @@
 
     <div class="field">
       <label>Character name</label>
-      <input id="name" type="text" placeholder="Sofia, Alex..." autocomplete="off" />
+      <input id="name" type="text" placeholder="Sofia, Alex." autocomplete="off" />
     </div>
 
     <div class="field">
       <label>Age (for profile)</label>
-      <input id="age_display" type="number" min="18" max="80" value="24" inputmode="numeric" />
+      <input
+        id="age_display"
+        type="number"
+        min="18"
+        max="80"
+        value="24"
+        inputmode="numeric" />
     </div>
 
     <div class="field">
-      <label>Personality traits (hold Ctrl/Shift for multiple)</label>
-      <select id="traits" multiple size="5">
-        <option value="Sage">Sage</option>
-        <option value="Nympho">Nympho</option>
-        <option value="Innocent">Innocent</option>
-        <option value="Experimenter">Experimenter</option>
-        <option value="Lover">Lover</option>
-        <option value="Submissive">Submissive</option>
-        <option value="Dominant">Dominant</option>
-        <option value="Mean">Mean</option>
-        <option value="Confidant">Confidant</option>
-        <option value="Caregiver">Caregiver</option>
-        <option value="Temptress">Temptress</option>
-      </select>
+      <label>Personality traits (tap to select)</label>
+      <div class="chip-group" id="traits_group">
+        <div class="chip" data-value="Sage">Sage</div>
+        <div class="chip" data-value="Innocent">Innocent</div>
+        <div class="chip" data-value="Lover">Lover</div>
+        <div class="chip" data-value="Experimenter">Experimenter</div>
+        <div class="chip" data-value="Submissive">Submissive</div>
+        <div class="chip" data-value="Dominant">Dominant</div>
+        <div class="chip" data-value="Confidant">Confidant</div>
+        <div class="chip" data-value="Caregiver">Caregiver</div>
+        <div class="chip" data-value="Temptress">Temptress</div>
+        <div class="chip" data-value="Playful">Playful</div>
+      </div>
     </div>
 
     <div class="field">
-      <label>Interests & hobbies (multiple)</label>
-      <select id="interests" multiple size="6">
-        <option value="Fitness">Fitness</option>
-        <option value="Cosplay">Cosplay</option>
-        <option value="Vlogging">Vlogging</option>
-        <option value="Martial Arts">Martial Arts</option>
-        <option value="Anime">Anime</option>
-        <option value="Art">Art</option>
-        <option value="Traveling">Traveling</option>
-        <option value="Series">Series</option>
-        <option value="Veganism">Veganism</option>
-        <option value="Watching Netflix">Watching Netflix</option>
-        <option value="Hiking">Hiking</option>
-        <option value="Gaming">Gaming</option>
-        <option value="Writing">Writing</option>
-        <option value="Self-Development">Self-Development</option>
-        <option value="DIY Crafting">DIY Crafting</option>
-      </select>
+      <label>Interests & hobbies (tap multiple)</label>
+      <div class="chip-group" id="interests_group">
+        <div class="chip" data-value="Fitness">Fitness</div>
+        <div class="chip" data-value="Cosplay">Cosplay</div>
+        <div class="chip" data-value="Vlogging">Vlogging</div>
+        <div class="chip" data-value="Martial Arts">Martial Arts</div>
+        <div class="chip" data-value="Anime">Anime</div>
+        <div class="chip" data-value="Art">Art</div>
+        <div class="chip" data-value="Traveling">Traveling</div>
+        <div class="chip" data-value="Series">Series</div>
+        <div class="chip" data-value="Watching Netflix">Watching Netflix</div>
+        <div class="chip" data-value="Hiking">Hiking</div>
+        <div class="chip" data-value="Gaming">Gaming</div>
+        <div class="chip" data-value="Writing">Writing</div>
+        <div class="chip" data-value="Self-Development">Self-Development</div>
+        <div class="chip" data-value="DIY Crafting">DIY Crafting</div>
+        <div class="chip" data-value="Spirituality">Spirituality</div>
+        <div class="chip" data-value="Esoterics">Esoterics</div>
+      </div>
     </div>
 
     <div class="field">
-      <label>Occupation</label>
-      <select id="occupation">
-        <option value="Student">Student</option>
-        <option value="Doctor">Doctor</option>
-        <option value="Nurse">Nurse</option>
-        <option value="Teacher">Teacher</option>
-        <option value="Lawyer">Lawyer</option>
-        <option value="Designer">Designer</option>
-        <option value="Photographer">Photographer</option>
-        <option value="Artist">Artist</option>
-        <option value="Model">Model</option>
-        <option value="Singer/Musician">Singer/Musician</option>
-        <option value="Fitness Coach">Fitness Coach</option>
-        <option value="Writer">Writer</option>
-        <option value="Chef/Cook">Cook</option>
-        <option value="Flight Attendant">Flight Attendant</option>
-      </select>
+      <label>Occupation (tap one)</label>
+      <div class="chip-group" id="occupation_group">
+        <div class="chip" data-value="Student">Student</div>
+        <div class="chip" data-value="Doctor">Doctor</div>
+        <div class="chip" data-value="Nurse">Nurse</div>
+        <div class="chip" data-value="Teacher">Teacher</div>
+        <div class="chip" data-value="Lawyer">Lawyer</div>
+        <div class="chip" data-value="Designer">Designer</div>
+        <div class="chip" data-value="Photographer">Photographer</div>
+        <div class="chip" data-value="Artist">Artist</div>
+        <div class="chip" data-value="Model">Model</div>
+        <div class="chip" data-value="Singer/Musician">Singer/Musician</div>
+        <div class="chip" data-value="Fitness Coach">Fitness Coach</div>
+        <div class="chip" data-value="Writer">Writer</div>
+        <div class="chip" data-value="Chef/Cook">Cook</div>
+        <div class="chip" data-value="Flight Attendant">Flight Attendant</div>
+      </div>
     </div>
 
-    <button id="save_btn">Save and send to bot ✅</button>
+    <button id="save_btn" class="main">Save and send to bot ✅</button>
     <div id="error" class="error"></div>
   </div>
 
@@ -297,15 +339,40 @@
       errorBox.style.display = "block"; // чтобы место под ошибку не прыгало
     }
 
-    function getMultiSelectValues(select) {
-      const values = [];
-      for (const option of select.options) {
-        if (option.selected) {
-          values.push(option.value);
-        }
-      }
-      return values;
+    // Чипы: мультивыбор
+    function setupMultiChipGroup(groupId) {
+      const group = document.getElementById(groupId);
+      if (!group) return;
+      group.addEventListener("click", (e) => {
+        const chip = e.target.closest(".chip");
+        if (!chip) return;
+        chip.classList.toggle("selected");
+      });
     }
+
+    // Чипы: одиночный выбор
+    function setupSingleChipGroup(groupId) {
+      const group = document.getElementById(groupId);
+      if (!group) return;
+      group.addEventListener("click", (e) => {
+        const chip = e.target.closest(".chip");
+        if (!chip) return;
+        Array.from(group.querySelectorAll(".chip.selected")).forEach((c) =>
+          c.classList.remove("selected")
+        );
+        chip.classList.add("selected");
+      });
+    }
+
+    function getSelectedValuesFromGroup(groupId) {
+      const group = document.getElementById(groupId);
+      if (!group) return [];
+      return Array.from(group.querySelectorAll(".chip.selected")).map((chip) => chip.dataset.value);
+    }
+
+    setupMultiChipGroup("traits_group");
+    setupMultiChipGroup("interests_group");
+    setupSingleChipGroup("occupation_group");
 
     document.getElementById("save_btn").addEventListener("click", () => {
       clearError();
@@ -322,7 +389,12 @@
         return;
       }
 
-      if (!ageDisplayRaw || Number.isNaN(ageDisplayNum) || ageDisplayNum < 18 || ageDisplayNum > 80) {
+      if (
+        !ageDisplayRaw ||
+        Number.isNaN(ageDisplayNum) ||
+        ageDisplayNum < 18 ||
+        ageDisplayNum > 80
+      ) {
         showError("Please enter a valid age between 18 and 80.", "age_display");
         return;
       }
@@ -338,15 +410,17 @@
         appearance_note: document.getElementById("appearance_note").value
       };
 
-      const traitsSelect = document.getElementById("traits");
-      const interestsSelect = document.getElementById("interests");
+      const traits = getSelectedValuesFromGroup("traits_group");
+      const interests = getSelectedValuesFromGroup("interests_group");
+      const occupationArr = getSelectedValuesFromGroup("occupation_group");
+      const occupation = occupationArr.length ? occupationArr[0] : null;
 
       const personality = {
         name,
         age_display: ageDisplayNum,
-        traits: getMultiSelectValues(traitsSelect),
-        interests: getMultiSelectValues(interestsSelect),
-        occupation: document.getElementById("occupation").value
+        traits,
+        interests,
+        occupation
       };
 
       const payload = {
