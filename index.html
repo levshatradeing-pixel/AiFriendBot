@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>AI Friend – Character Creator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <style>
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #0f1014;
+      color: #fff;
+    }
+    .app {
+      padding: 16px;
+    }
+    h1 {
+      margin-top: 0;
+      font-size: 22px;
+    }
+    h2 {
+      margin-top: 24px;
+      font-size: 18px;
+    }
+    .field {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 10px;
+    }
+    label {
+      font-size: 13px;
+      margin-bottom: 4px;
+      opacity: 0.9;
+    }
+    select, input, textarea {
+      border-radius: 8px;
+      border: none;
+      padding: 8px 10px;
+      font-size: 14px;
+      outline: none;
+      background: #1b1c23;
+      color: #fff;
+    }
+    textarea {
+      resize: vertical;
+    }
+    button {
+      width: 100%;
+      margin-top: 16px;
+      padding: 10px 14px;
+      font-size: 16px;
+      border-radius: 999px;
+      border: none;
+      cursor: pointer;
+      background: #2b8cff;
+      color: #fff;
+      font-weight: 600;
+    }
+    .hint {
+      font-size: 12px;
+      opacity: 0.7;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <h1>Character creator 🎨</h1>
+
+    <!-- БЛОК 1: тип отношений и гендер персонажа -->
+    <h2>Relationship & gender</h2>
+
+    <div class="field">
+      <label>Relationship type</label>
+      <select id="relationship_type">
+        <option value="romantic">Romantic</option>
+        <option value="friend">Just a friend</option>
+      </select>
+      <div class="hint">Romantic = flirty, Friend = no romance.</div>
+    </div>
+
+    <div class="field">
+      <label>Partner gender</label>
+      <select id="partner_gender">
+        <option value="female">Female</option>
+        <option value="male">Male</option>
+        <option value="other">Other / flexible</option>
+      </select>
+    </div>
+
+    <!-- БЛОК 2: внешность -->
+    <h2>Appearance</h2>
+
+    <div class="field">
+      <label>Character gender (look)</label>
+      <select id="appearance_gender">
+        <option value="female">Female</option>
+        <option value="male">Male</option>
+        <option value="other">Other / androgynous</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Ethnicity</label>
+      <select id="ethnicity">
+        <option value="caucasian">Caucasian</option>
+        <option value="latina">Latina</option>
+        <option value="asian">Asian</option>
+        <option value="arab">Arab</option>
+        <option value="black">Black / Afro</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Age range</label>
+      <select id="age">
+        <option value="18-20">18–20</option>
+        <option value="20s">20s</option>
+        <option value="30s">30s</option>
+        <option value="40-55">40–55</option>
+        <option value="55+">55+</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Eye color</label>
+      <select id="eye_color">
+        <option value="brown">Brown</option>
+        <option value="blue">Blue</option>
+        <option value="green">Green</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Hair style</label>
+      <select id="hair_style">
+        <option value="straight">Straight</option>
+        <option value="braids">Braids</option>
+        <option value="bangs">Bangs</option>
+        <option value="curly">Curly</option>
+        <option value="bun">Bun</option>
+        <option value="short">Short</option>
+        <option value="long">Long</option>
+        <option value="ponytail">Ponytail</option>
+        <option value="pigtails">Pigtails</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Hair color</label>
+      <select id="hair_color">
+        <option value="blonde">Blonde</option>
+        <option value="brown">Brown</option>
+        <option value="black">Black</option>
+        <option value="gray">Gray</option>
+        <option value="white">White</option>
+        <option value="red">Red</option>
+        <option value="pink">Pink</option>
+        <option value="blue">Blue</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Style / vibe</label>
+      <select id="style">
+        <option value="casual">Casual</option>
+        <option value="cute">Cute</option>
+        <option value="sexy">Sexy</option>
+        <option value="sporty">Sporty</option>
+        <option value="elegant">Elegant</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Appearance note (free text)</label>
+      <textarea id="appearance_note" rows="3"
+        placeholder="Long dark hair, soft smile, natural makeup..."></textarea>
+    </div>
+
+    <!-- БЛОК 3: личность -->
+    <h2>Personality</h2>
+
+    <div class="field">
+      <label>Character name</label>
+      <input id="name" type="text" placeholder="Sofia, Alex..." />
+    </div>
+
+    <div class="field">
+      <label>Age (for profile)</label>
+      <input id="age_display" type="number" min="18" max="80" value="24" />
+    </div>
+
+    <div class="field">
+      <label>Personality traits (hold Ctrl/Shift for multiple)</label>
+      <select id="traits" multiple size="5">
+        <option value="Sage">Sage</option>
+        <option value="Nympho">Nympho</option>
+        <option value="Innocent">Innocent</option>
+        <option value="Experimenter">Experimenter</option>
+        <option value="Lover">Lover</option>
+        <option value="Submissive">Submissive</option>
+        <option value="Dominant">Dominant</option>
+        <option value="Mean">Mean</option>
+        <option value="Confidant">Confidant</option>
+        <option value="Caregiver">Caregiver</option>
+        <option value="Temptress">Temptress</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Interests & hobbies (multiple)</label>
+      <select id="interests" multiple size="6">
+        <option value="Fitness">Fitness</option>
+        <option value="Cosplay">Cosplay</option>
+        <option value="Vlogging">Vlogging</option>
+        <option value="Martial Arts">Martial Arts</option>
+        <option value="Anime">Anime</option>
+        <option value="Art">Art</option>
+        <option value="Traveling">Traveling</option>
+        <option value="Series">Series</option>
+        <option value="Veganism">Veganism</option>
+        <option value="Watching Netflix">Watching Netflix</option>
+        <option value="Hiking">Hiking</option>
+        <option value="Gaming">Gaming</option>
+        <option value="Writing">Writing</option>
+        <option value="Self-Development">Self-Development</option>
+        <option value="DIY Crafting">DIY Crafting</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>Occupation</label>
+      <select id="occupation">
+        <option value="Student">Student</option>
+        <option value="Doctor">Doctor</option>
+        <option value="Nurse">Nurse</option>
+        <option value="Teacher">Teacher</option>
+        <option value="Lawyer">Lawyer</option>
+        <option value="Designer">Designer</option>
+        <option value="Photographer">Photographer</option>
+        <option value="Artist">Artist</option>
+        <option value="Model">Model</option>
+        <option value="Singer/Musician">Singer/Musician</option>
+        <option value="Fitness Coach">Fitness Coach</option>
+        <option value="Writer">Writer</option>
+        <option value="Chef/Cook">Cook</option>
+        <option value="Flight Attendant">Flight Attendant</option>
+      </select>
+    </div>
+
+    <button id="save_btn">Save and send to bot ✅</button>
+  </div>
+
+  <script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+    tg.ready();
+
+    function getMultiSelectValues(select) {
+      const values = [];
+      for (const option of select.options) {
+        if (option.selected) {
+          values.push(option.value);
+        }
+      }
+      return values;
+    }
+
+    document.getElementById("save_btn").addEventListener("click", () => {
+      const relationship_type = document.getElementById("relationship_type").value;
+      const partner_gender = document.getElementById("partner_gender").value;
+
+      const appearance = {
+        gender: document.getElementById("appearance_gender").value,
+        ethnicity: document.getElementById("ethnicity").value,
+        age: document.getElementById("age").value,
+        eye_color: document.getElementById("eye_color").value,
+        hair_style: document.getElementById("hair_style").value,
+        hair_color: document.getElementById("hair_color").value,
+        style: document.getElementById("style").value,
+        appearance_note: document.getElementById("appearance_note").value
+      };
+
+      const traitsSelect = document.getElementById("traits");
+      const interestsSelect = document.getElementById("interests");
+
+      const personality = {
+        name: document.getElementById("name").value,
+        age_display: Number(document.getElementById("age_display").value) || null,
+        traits: getMultiSelectValues(traitsSelect),
+        interests: getMultiSelectValues(interestsSelect),
+        occupation: document.getElementById("occupation").value
+      };
+
+      const payload = {
+        relationship_type,
+        partner_gender,
+        appearance,
+        personality
+      };
+
+      tg.sendData(JSON.stringify(payload));
+      tg.close();
+    });
+  </script>
+</body>
+</html>
