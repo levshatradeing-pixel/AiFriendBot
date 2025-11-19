@@ -85,7 +85,6 @@
       <select id="partner_gender">
         <option value="female">Female</option>
         <option value="male">Male</option>
-        <option value="other">Other / flexible</option>
       </select>
     </div>
 
@@ -97,9 +96,10 @@
       <select id="appearance_gender">
         <option value="female">Female</option>
         <option value="male">Male</option>
-        <option value="other">Other / androgynous</option>
+        <option value="androgynous">Androgynous</option>
       </select>
     </div>
+
 
     <div class="field">
       <label>Ethnicity</label>
@@ -173,9 +173,9 @@
     </div>
 
     <div class="field">
-      <label>Appearance note (free text)</label>
+      <label>Appearance note (optional)</label>
       <textarea id="appearance_note" rows="3"
-        placeholder="Long dark hair, soft smile, natural makeup..."></textarea>
+        placeholder="Optional: Long dark hair, soft smile, natural makeup..."></textarea>
     </div>
 
     <!-- БЛОК 3: личность -->
@@ -271,6 +271,16 @@
       const relationship_type = document.getElementById("relationship_type").value;
       const partner_gender = document.getElementById("partner_gender").value;
 
+      const name = document.getElementById("name").value.trim();
+      const ageDisplayRaw = document.getElementById("age_display").value.trim();
+      const ageDisplayNum = Number(ageDisplayRaw);
+
+  // Простая проверка обязательных полей
+      if (!name || !ageDisplayRaw || Number.isNaN(ageDisplayNum)) {
+        alert("Please fill in character Name and valid Age before saving.");
+        return;
+      }
+
       const appearance = {
         gender: document.getElementById("appearance_gender").value,
         ethnicity: document.getElementById("ethnicity").value,
@@ -286,8 +296,8 @@
       const interestsSelect = document.getElementById("interests");
 
       const personality = {
-        name: document.getElementById("name").value,
-        age_display: Number(document.getElementById("age_display").value) || null,
+        name,
+        age_display: ageDisplayNum,
         traits: getMultiSelectValues(traitsSelect),
         interests: getMultiSelectValues(interestsSelect),
         occupation: document.getElementById("occupation").value
