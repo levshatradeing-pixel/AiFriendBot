@@ -63,6 +63,12 @@
       opacity: 0.7;
       margin-bottom: 8px;
     }
+    .error {
+      font-size: 12px;
+      color: #ff6b6b;
+      margin-top: 10px;
+      min-height: 16px;
+    }
   </style>
 </head>
 <body>
@@ -188,7 +194,7 @@
 
     <div class="field">
       <label>Age (for profile)</label>
-      <input id="age_display" type="number" min="18" max="80" value="24" />
+      <input id="age_display" type="number" min="18" max="80" value="24" inputmode="numeric" />
     </div>
 
     <div class="field">
@@ -250,6 +256,7 @@
     </div>
 
     <button id="save_btn">Save and send to bot ✅</button>
+    <div id="error" class="error"></div>
   </div>
 
   <script>
@@ -258,11 +265,36 @@
     if (tg) {
       tg.ready();
       tg.expand();
-      // В новых версиях мини-аппов можно отключить вертикальные свайпы,
-      // чтобы не было конфликтов с клавиатурой при вводе текста.
       if (typeof tg.isVersionAtLeast === "function" && tg.isVersionAtLeast("7.7")) {
         tg.disableVerticalSwipes();
       }
+    }
+
+    // Удаляем любые буквы из возраста
+    const ageInput = document.getElementById("age_display");
+    ageInput.addEventListener("input", (e) => {
+      e.target.value = e.target.value.replace(/[^\d]/g, "");
+    });
+
+    const errorBox = document.getElementById("error");
+
+    function showError(message, focusId) {
+      errorBox.textContent = message;
+      errorBox.style.display = "block";
+      if (focusId) {
+        const el = document.getElementById(focusId);
+        if (el) {
+          el.focus();
+          try {
+            el.scrollIntoView({ behavior: "smooth", block: "center" });
+          } catch (e) {}
+        }
+      }
+    }
+
+    function clearError() {
+      errorBox.textContent = "";
+      errorBox.style.display = "block"; // чтобы место под ошибку не прыгало
     }
 
     function getMultiSelectValues(select) {
@@ -276,16 +308,22 @@
     }
 
     document.getElementById("save_btn").addEventListener("click", () => {
+      clearError();
+
       const relationship_type = document.getElementById("relationship_type").value;
       const partner_gender = document.getElementById("partner_gender").value;
 
       const name = document.getElementById("name").value.trim();
-      const ageDisplayRaw = document.getElementById("age_display").value.trim();
+      const ageDisplayRaw = ageInput.value.trim();
       const ageDisplayNum = Number(ageDisplayRaw);
 
-      // Простая проверка обязательных полей
-      if (!name || !ageDisplayRaw || Number.isNaN(ageDisplayNum)) {
-        alert("Please fill in character Name and valid Age before saving.");
+      if (!name) {
+        showError("Please enter character name.", "name");
+        return;
+      }
+
+      if (!ageDisplayRaw || Number.isNaN(ageDisplayNum) || ageDisplayNum < 18 || ageDisplayNum > 80) {
+        showError("Please enter a valid age between 18 and 80.", "age_display");
         return;
       }
 
@@ -322,9 +360,8 @@
         tg.sendData(JSON.stringify(payload));
         tg.close();
       } else {
-        // На случай теста в обычном браузере
         console.log("Payload:", payload);
-        alert("WebApp test mode (not in Telegram). Check console.");
+        showError("Test mode (not in Telegram) – open in Telegram to send to bot.");
       }
     });
   </script>
