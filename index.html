@@ -34,7 +34,6 @@
       margin-bottom: 4px;
       opacity: 0.9;
     }
-    select,
     input,
     textarea {
       border-radius: 8px;
@@ -72,7 +71,7 @@
       min-height: 16px;
     }
 
-    /* Чипы-кнопки для мультивыбора */
+    /* Чипы-кнопки */
     .chip-group {
       display: flex;
       flex-wrap: wrap;
@@ -88,13 +87,13 @@
       color: #d0d0ff;
       cursor: pointer;
       user-select: none;
-      flex: 0 1 calc(50% - 8px); /* примерно 2 в ряд на мобиле */
+      flex: 0 1 calc(50% - 8px); /* ~2 в ряд на мобиле */
       text-align: center;
       box-sizing: border-box;
     }
     @media (min-width: 480px) {
       .chip {
-        flex: 0 1 calc(33.33% - 8px); /* на чуть больших можно 3 в ряд */
+        flex: 0 1 calc(33.33% - 8px); /* на чуть больших экранах ~3 в ряд */
       }
     }
     .chip.selected {
@@ -112,19 +111,19 @@
 
     <div class="field">
       <label>Relationship type</label>
-      <select id="relationship_type">
-        <option value="romantic">Romantic</option>
-        <option value="friend">Just a friend</option>
-      </select>
+      <div class="chip-group" id="relationship_group">
+        <div class="chip selected" data-value="romantic">Romantic</div>
+        <div class="chip" data-value="friend">Just a friend</div>
+      </div>
       <div class="hint">Romantic = flirty, Friend = no romance.</div>
     </div>
 
     <div class="field">
       <label>Partner gender</label>
-      <select id="partner_gender">
-        <option value="female">Female</option>
-        <option value="male">Male</option>
-      </select>
+      <div class="chip-group" id="partner_gender_group">
+        <div class="chip selected" data-value="female">Female</div>
+        <div class="chip" data-value="male">Male</div>
+      </div>
     </div>
 
     <!-- БЛОК 2: внешность -->
@@ -132,84 +131,84 @@
 
     <div class="field">
       <label>Character gender (look)</label>
-      <select id="appearance_gender">
-        <option value="female">Female</option>
-        <option value="male">Male</option>
-        <option value="androgynous">Androgynous</option>
-      </select>
+      <div class="chip-group" id="appearance_gender_group">
+        <div class="chip selected" data-value="female">Female</div>
+        <div class="chip" data-value="male">Male</div>
+        <div class="chip" data-value="androgynous">Androgynous</div>
+      </div>
     </div>
 
     <div class="field">
       <label>Ethnicity</label>
-      <select id="ethnicity">
-        <option value="caucasian">Caucasian</option>
-        <option value="european">European</option>
-        <option value="latina">Latina</option>
-        <option value="asian">Asian</option>
-        <option value="indian">Indian</option>
-        <option value="arab">Arab</option>
-        <option value="black">Black / Afro</option>
-      </select>
+      <div class="chip-group" id="ethnicity_group">
+        <div class="chip selected" data-value="caucasian">Caucasian</div>
+        <div class="chip" data-value="european">European</div>
+        <div class="chip" data-value="latina">Latina</div>
+        <div class="chip" data-value="asian">Asian</div>
+        <div class="chip" data-value="indian">Indian</div>
+        <div class="chip" data-value="arab">Arab</div>
+        <div class="chip" data-value="black">Black / Afro</div>
+      </div>
     </div>
 
     <div class="field">
       <label>Age range</label>
-      <select id="age">
-        <option value="18-20">18–20</option>
-        <option value="20s">20s</option>
-        <option value="30s">30s</option>
-        <option value="40-55">40–55</option>
-        <option value="55+">55+</option>
-      </select>
+      <div class="chip-group" id="age_group">
+        <div class="chip selected" data-value="18-20">18–20</div>
+        <div class="chip" data-value="20s">20s</div>
+        <div class="chip" data-value="30s">30s</div>
+        <div class="chip" data-value="40-55">40–55</div>
+        <div class="chip" data-value="55+">55+</div>
+      </div>
     </div>
 
     <div class="field">
       <label>Eye color</label>
-      <select id="eye_color">
-        <option value="brown">Brown</option>
-        <option value="blue">Blue</option>
-        <option value="green">Green</option>
-      </select>
+      <div class="chip-group" id="eye_color_group">
+        <div class="chip selected" data-value="brown">Brown</div>
+        <div class="chip" data-value="blue">Blue</div>
+        <div class="chip" data-value="green">Green</div>
+      </div>
     </div>
 
     <div class="field">
       <label>Hair style</label>
-      <select id="hair_style">
-        <option value="straight">Straight</option>
-        <option value="braids">Braids</option>
-        <option value="bangs">Bangs</option>
-        <option value="curly">Curly</option>
-        <option value="bun">Bun</option>
-        <option value="short">Short</option>
-        <option value="long">Long</option>
-        <option value="ponytail">Ponytail</option>
-        <option value="pigtails">Pigtails</option>
-      </select>
+      <div class="chip-group" id="hair_style_group">
+        <div class="chip selected" data-value="straight">Straight</div>
+        <div class="chip" data-value="braids">Braids</div>
+        <div class="chip" data-value="bangs">Bangs</div>
+        <div class="chip" data-value="curly">Curly</div>
+        <div class="chip" data-value="bun">Bun</div>
+        <div class="chip" data-value="short">Short</div>
+        <div class="chip" data-value="long">Long</div>
+        <div class="chip" data-value="ponytail">Ponytail</div>
+        <div class="chip" data-value="pigtails">Pigtails</div>
+      </div>
     </div>
 
     <div class="field">
       <label>Hair color</label>
-      <select id="hair_color">
-        <option value="blonde">Blonde</option>
-        <option value="brown">Brown</option>
-        <option value="black">Black</option>
-        <option value="gray">Gray</option>
-        <option value="white">White</option>
-        <option value="red">Red</option>
-        <option value="pink">Pink</option>
-        <option value="blue">Blue</option>
-      </select>
+      <div class="chip-group" id="hair_color_group">
+        <div class="chip selected" data-value="blonde">Blonde</div>
+        <div class="chip" data-value="brown">Brown</div>
+        <div class="chip" data-value="black">Black</div>
+        <div class="chip" data-value="gray">Gray</div>
+        <div class="chip" data-value="white">White</div>
+        <div class="chip" data-value="red">Red</div>
+        <div class="chip" data-value="pink">Pink</div>
+        <div class="chip" data-value="blue">Blue</div>
+      </div>
     </div>
 
     <div class="field">
       <label>Style / vibe</label>
-      <select id="style">
-        <option value="casual">Casual</option>
-        <option value="cute">Cute</option>
-        <option value="sexy">Sexy</option>
-        <option value="sporty">Sporty</option>
-        <option value="elegant">Elegant</option>
-      </select>
+      <div class="chip-group" id="style_group">
+        <div class="chip selected" data-value="casual">Casual</div>
+        <div class="chip" data-value="cute">Cute</div>
+        <div class="chip" data-value="sexy">Sexy</div>
+        <div class="chip" data-value="sporty">Sporty</div>
+        <div class="chip" data-value="elegant">Elegant</div>
+      </div>
     </div>
 
     <div class="field">
@@ -225,7 +224,7 @@
 
     <div class="field">
       <label>Character name</label>
-      <input id="name" type="text" placeholder="Sofia, Alex." autocomplete="off" />
+      <input id="name" type="text" placeholder="Sofia, Alex..." autocomplete="off" />
     </div>
 
     <div class="field">
@@ -280,7 +279,7 @@
     <div class="field">
       <label>Occupation (tap one)</label>
       <div class="chip-group" id="occupation_group">
-        <div class="chip" data-value="Student">Student</div>
+        <div class="chip selected" data-value="Student">Student</div>
         <div class="chip" data-value="Doctor">Doctor</div>
         <div class="chip" data-value="Nurse">Nurse</div>
         <div class="chip" data-value="Teacher">Teacher</div>
@@ -312,7 +311,6 @@
       }
     }
 
-    // Удаляем любые буквы из возраста
     const ageInput = document.getElementById("age_display");
     ageInput.addEventListener("input", (e) => {
       e.target.value = e.target.value.replace(/[^\d]/g, "");
@@ -336,10 +334,10 @@
 
     function clearError() {
       errorBox.textContent = "";
-      errorBox.style.display = "block"; // чтобы место под ошибку не прыгало
+      errorBox.style.display = "block"; // чтобы место не прыгало
     }
 
-    // Чипы: мультивыбор
+    // Мультичипы
     function setupMultiChipGroup(groupId) {
       const group = document.getElementById(groupId);
       if (!group) return;
@@ -350,7 +348,7 @@
       });
     }
 
-    // Чипы: одиночный выбор
+    // Одиночный выбор
     function setupSingleChipGroup(groupId) {
       const group = document.getElementById(groupId);
       if (!group) return;
@@ -370,6 +368,21 @@
       return Array.from(group.querySelectorAll(".chip.selected")).map((chip) => chip.dataset.value);
     }
 
+    function getSingleValueFromGroup(groupId) {
+      const values = getSelectedValuesFromGroup(groupId);
+      return values.length ? values[0] : null;
+    }
+
+    // Настраиваем группы
+    setupSingleChipGroup("relationship_group");
+    setupSingleChipGroup("partner_gender_group");
+    setupSingleChipGroup("appearance_gender_group");
+    setupSingleChipGroup("ethnicity_group");
+    setupSingleChipGroup("age_group");
+    setupSingleChipGroup("eye_color_group");
+    setupSingleChipGroup("hair_style_group");
+    setupSingleChipGroup("hair_color_group");
+    setupSingleChipGroup("style_group");
     setupMultiChipGroup("traits_group");
     setupMultiChipGroup("interests_group");
     setupSingleChipGroup("occupation_group");
@@ -377,8 +390,8 @@
     document.getElementById("save_btn").addEventListener("click", () => {
       clearError();
 
-      const relationship_type = document.getElementById("relationship_type").value;
-      const partner_gender = document.getElementById("partner_gender").value;
+      const relationship_type = getSingleValueFromGroup("relationship_group");
+      const partner_gender = getSingleValueFromGroup("partner_gender_group");
 
       const name = document.getElementById("name").value.trim();
       const ageDisplayRaw = ageInput.value.trim();
@@ -400,20 +413,19 @@
       }
 
       const appearance = {
-        gender: document.getElementById("appearance_gender").value,
-        ethnicity: document.getElementById("ethnicity").value,
-        age: document.getElementById("age").value,
-        eye_color: document.getElementById("eye_color").value,
-        hair_style: document.getElementById("hair_style").value,
-        hair_color: document.getElementById("hair_color").value,
-        style: document.getElementById("style").value,
+        gender: getSingleValueFromGroup("appearance_gender_group"),
+        ethnicity: getSingleValueFromGroup("ethnicity_group"),
+        age: getSingleValueFromGroup("age_group"),
+        eye_color: getSingleValueFromGroup("eye_color_group"),
+        hair_style: getSingleValueFromGroup("hair_style_group"),
+        hair_color: getSingleValueFromGroup("hair_color_group"),
+        style: getSingleValueFromGroup("style_group"),
         appearance_note: document.getElementById("appearance_note").value
       };
 
       const traits = getSelectedValuesFromGroup("traits_group");
       const interests = getSelectedValuesFromGroup("interests_group");
-      const occupationArr = getSelectedValuesFromGroup("occupation_group");
-      const occupation = occupationArr.length ? occupationArr[0] : null;
+      const occupation = getSingleValueFromGroup("occupation_group");
 
       const personality = {
         name,
