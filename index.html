@@ -14,6 +14,7 @@
     }
     .app {
       padding: 16px;
+      box-sizing: border-box;
     }
     h1 {
       margin-top: 0;
@@ -100,7 +101,6 @@
       </select>
     </div>
 
-
     <div class="field">
       <label>Ethnicity</label>
       <select id="ethnicity">
@@ -183,7 +183,7 @@
 
     <div class="field">
       <label>Character name</label>
-      <input id="name" type="text" placeholder="Sofia, Alex..." />
+      <input id="name" type="text" placeholder="Sofia, Alex..." autocomplete="off" />
     </div>
 
     <div class="field">
@@ -253,9 +253,17 @@
   </div>
 
   <script>
-    const tg = window.Telegram.WebApp;
-    tg.expand();
-    tg.ready();
+    const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
+
+    if (tg) {
+      tg.ready();
+      tg.expand();
+      // В новых версиях мини-аппов можно отключить вертикальные свайпы,
+      // чтобы не было конфликтов с клавиатурой при вводе текста.
+      if (typeof tg.isVersionAtLeast === "function" && tg.isVersionAtLeast("7.7")) {
+        tg.disableVerticalSwipes();
+      }
+    }
 
     function getMultiSelectValues(select) {
       const values = [];
@@ -275,7 +283,7 @@
       const ageDisplayRaw = document.getElementById("age_display").value.trim();
       const ageDisplayNum = Number(ageDisplayRaw);
 
-  // Простая проверка обязательных полей
+      // Простая проверка обязательных полей
       if (!name || !ageDisplayRaw || Number.isNaN(ageDisplayNum)) {
         alert("Please fill in character Name and valid Age before saving.");
         return;
@@ -310,8 +318,14 @@
         personality
       };
 
-      tg.sendData(JSON.stringify(payload));
-      tg.close();
+      if (tg) {
+        tg.sendData(JSON.stringify(payload));
+        tg.close();
+      } else {
+        // На случай теста в обычном браузере
+        console.log("Payload:", payload);
+        alert("WebApp test mode (not in Telegram). Check console.");
+      }
     });
   </script>
 </body>
