@@ -1,504 +1,153 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>AI Friend — Character Creator</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
-  <style>
-    body {
-      margin: 0;
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: #0f1014;
-      color: #fff;
-    }
-    .app {
-      padding: 16px;
-      box-sizing: border-box;
-    }
-    h1 {
-      margin-top: 0;
-      font-size: 22px;
-    }
-    h2 {
-      margin-top: 16px;
-      font-size: 18px;
-    }
-    .section {
-      margin-top: 12px;
-      padding: 10px 12px;
-      border-radius: 16px;
-      background: #10131c;
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.45);
-    }
-    .field {
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 10px;
-    }
-    label {
-      font-size: 13px;
-      margin-bottom: 4px;
-      opacity: 0.9;
-    }
-    input {
-      border-radius: 8px;
-      border: none;
-      padding: 8px 10px;
-      font-size: 14px;
-      outline: none;
-      background: #1b1c23;
-      color: #fff;
-    }
-    button.main {
-      width: 100%;
-      margin-top: 16px;
-      padding: 10px 14px;
-      font-size: 16px;
-      border-radius: 999px;
-      border: none;
-      cursor: pointer;
-      background: linear-gradient(135deg, #2b8cff, #5fa8ff);
-      color: #fff;
-      font-weight: 600;
-      box-shadow: 0 8px 18px rgba(43, 140, 255, 0.35);
-      transition: transform 0.1s ease, box-shadow 0.1s ease, opacity 0.1s ease;
-    }
-    button.main:active {
-      transform: translateY(1px);
-      box-shadow: 0 4px 10px rgba(43, 140, 255, 0.25);
-      opacity: 0.9;
-    }
-    .hint {
-      font-size: 12px;
-      opacity: 0.7;
-      margin-bottom: 8px;
-    }
-    .error {
-      font-size: 12px;
-      color: #ff6b6b;
-      margin-top: 10px;
-      min-height: 16px;
-    }
-    .steps-indicator {
-      font-size: 12px;
-      opacity: 0.8;
-      margin-bottom: 6px;
-    }
-    .chip-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 4px;
-    }
-    .chip {
-      border-radius: 999px;
-      padding: 6px 10px;
-      font-size: 13px;
-      background: radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.12), #1b1c23);
-      border: 1px solid rgba(43, 140, 255, 0.6);
-      color: #d0d8ff;
-      cursor: pointer;
-      user-select: none;
-      flex: 0 1 calc(50% - 8px);
-      text-align: center;
-      box-sizing: border-box;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
-      transition: background 0.12s ease, transform 0.08s ease, box-shadow 0.12s ease;
-    }
-    @media (min-width: 480px) {
-      .chip {
-        flex: 0 1 calc(33.33% - 8px);
-      }
-    }
-    .chip.selected {
-      background: linear-gradient(135deg, #2b8cff, #5fa8ff);
-      color: #fff;
-      box-shadow: 0 8px 18px rgba(43, 140, 255, 0.35);
-      transform: translateY(-1px);
-    }
-    .chip:active {
-      transform: translateY(0);
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.45);
-    }
-    #step1, #step2 {
-      display: none;
-    }
-    #step1.active, #step2.active {
-      display: block;
-    }
-    .steps-footer {
-      margin-top: 12px;
-      display: flex;
-      gap: 10px;
-    }
-    .steps-footer button {
-      flex: 1;
-    }
-    .portrait-box {
-      margin-top: 8px;
-      border-radius: 16px;
-      background: radial-gradient(circle at 20% 0%, rgba(255,255,255,0.08), #161821);
-      padding: 10px;
-      text-align: center;
-      font-size: 13px;
-      opacity: 0.9;
-      border: 1px dashed rgba(120, 140, 255, 0.7);
-    }
-    .portrait-note {
-      font-size: 11px;
-      opacity: 0.65;
-      margin-top: 4px;
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <title>AI Friend Bot — Character Builder</title>
+    <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div class="app">
-    <h1>Character creator</h1>
-    <div class="steps-indicator" id="steps_indicator">Step 1 of 2 — Appearance</div>
 
-    <!-- STEP 1: APPEARANCE -->
-    <div id="step1" class="active">
-      <div class="section">
-        <h2>Basics</h2>
-        <div class="field">
-          <label>Character gender</label>
-          <div class="chip-group" id="partner_gender_group">
-            <div class="chip selected" data-value="female">Female</div>
-            <div class="chip" data-value="male">Male</div>
-          </div>
+    <div id="loading">Loading...</div>
+
+    <div id="app" class="hidden fade">
+        <div id="error-box" class="hidden"></div>
+
+        <!-- STEP 1 -->
+        <div id="step1" class="fade show">
+            <h1>Step 1 — Appearance</h1>
+
+            <div class="section" data-field="gender">
+                <h3>Gender</h3>
+                <div class="chips">
+                    <div class="chip">Female</div>
+                    <div class="chip">Male</div>
+                    <div class="chip">Androgynous</div>
+                </div>
+            </div>
+
+            <div class="section" data-field="ethnicity">
+                <h3>Ethnicity</h3>
+                <div class="chips">
+                    <div class="chip">European</div>
+                    <div class="chip">Latina</div>
+                    <div class="chip">Asian</div>
+                    <div class="chip">Arab</div>
+                    <div class="chip">Black</div>
+                    <div class="chip">Indian</div>
+                </div>
+            </div>
+
+            <div class="section" data-field="age_group">
+                <h3>Age Range</h3>
+                <div class="chips">
+                    <div class="chip">Teen (18+)</div>
+                    <div class="chip">20s</div>
+                    <div class="chip">30s</div>
+                    <div class="chip">40–55</div>
+                    <div class="chip">55+</div>
+                </div>
+            </div>
+
+            <div class="section" data-field="eye_color">
+                <h3>Eye Color</h3>
+                <div class="chips">
+                    <div class="chip">Brown</div>
+                    <div class="chip">Blue</div>
+                    <div class="chip">Green</div>
+                </div>
+            </div>
+
+            <div class="section" data-field="hair_style">
+                <h3>Hair Style</h3>
+                <div class="chips">
+                    <div class="chip">Straight</div>
+                    <div class="chip">Braids</div>
+                    <div class="chip">Bangs</div>
+                    <div class="chip">Curly</div>
+                    <div class="chip">Bun</div>
+                    <div class="chip">Short</div>
+                    <div class="chip">Long</div>
+                    <div class="chip">Ponytail</div>
+                    <div class="chip">Pigtails</div>
+                </div>
+            </div>
+
+            <div class="section" data-field="hair_color">
+                <h3>Hair Color</h3>
+                <div class="chips">
+                    <div class="chip">Blonde</div>
+                    <div class="chip">Brown</div>
+                    <div class="chip">Black</div>
+                    <div class="chip">Gray</div>
+                    <div class="chip">Red</div>
+                    <div class="chip">Pink</div>
+                    <div class="chip">Blue</div>
+                    <div class="chip">White</div>
+                </div>
+            </div>
+
+            <div class="section" data-field="body_shape">
+                <h3>Body Shape</h3>
+                <div class="chips">
+                    <div class="chip">Slim</div>
+                    <div class="chip">Average</div>
+                    <div class="chip">Curvy</div>
+                </div>
+            </div>
+
+            <div class="section" data-field="style_vibe">
+                <h3>Style</h3>
+                <div class="chips">
+                    <div class="chip">Casual</div>
+                    <div class="chip">Cute</div>
+                    <div class="chip">Sexy</div>
+                    <div class="chip">Sporty</div>
+                    <div class="chip">Elegant</div>
+                </div>
+            </div>
         </div>
 
-        <div class="field">
-          <label>Age</label>
-          <div class="chip-group" id="age_group">
-            <div class="chip selected" data-value="20-25">20-25</div>
-            <div class="chip" data-value="18-20">18-20</div>
-            <div class="chip" data-value="26-30">26-30</div>
-            <div class="chip" data-value="30-35">30-35</div>
-            <div class="chip" data-value="35-45">35-45</div>
-            <div class="chip" data-value="45+">45+</div>
-          </div>
-        </div>
-      </div>
+        <!-- STEP 2 -->
+        <div id="step2" class="hidden fade">
+            <h1>Step 2 — Personality</h1>
 
-      <div class="section">
-        <h2>Appearance</h2>
+            <div class="section">
+                <h3>Character Name</h3>
+                <input id="char_name" class="input-field" type="text" placeholder="Enter name" />
+            </div>
 
-        <div class="field">
-          <label>Hair style</label>
-          <div class="chip-group" id="hair_style_group">
-            <div class="chip selected" data-value="long">Long</div>
-            <div class="chip" data-value="short">Short</div>
-            <div class="chip" data-value="curly">Curly</div>
-            <div class="chip" data-value="straight">Straight</div>
-            <div class="chip" data-value="braids">Braids</div>
-            <div class="chip" data-value="bun">Bun</div>
-          </div>
-        </div>
+            <div class="section">
+                <h3>Character Age</h3>
+                <input id="char_age" class="input-field" type="number" min="18" max="80" />
+            </div>
 
-        <div class="field">
-          <label>Hair color</label>
-          <div class="chip-group" id="hair_color_group">
-            <div class="chip selected" data-value="dark">Dark</div>
-            <div class="chip" data-value="blonde">Blonde</div>
-            <div class="chip" data-value="red">Red</div>
-            <div class="chip" data-value="brown">Brown</div>
-            <div class="chip" data-value="pink">Pink</div>
-          </div>
+            <div class="section">
+                <h3>Personality Traits</h3>
+                <div class="chips" id="traits_container"></div>
+            </div>
+
+            <div class="section">
+                <h3>Interests & Hobbies</h3>
+                <div class="chips" id="interests_container"></div>
+            </div>
+
+            <div class="section">
+                <h3>Occupation</h3>
+                <div class="chips" id="occupation_container"></div>
+            </div>
+
+            <!-- CHARACTER PREVIEW -->
+            <div id="character-preview">
+                <div class="preview-title">Your character</div>
+                <div class="preview-body"></div>
+            </div>
+
         </div>
 
-        <div class="field">
-          <label>Ethnicity</label>
-          <div class="chip-group" id="ethnicity_group">
-            <div class="chip selected" data-value="asian">Asian</div>
-            <div class="chip" data-value="caucasian">Caucasian</div>
-            <div class="chip" data-value="black">Black</div>
-            <div class="chip" data-value="latina">Latina</div>
-            <div class="chip" data-value="arabic">Arabic</div>
-            <div class="chip" data-value="indian">Indian</div>
-            <div class="chip" data-value="mixed">Mixed</div>
-          </div>
-        </div>
-
-        <div class="field">
-          <label>Body type</label>
-          <div class="chip-group" id="body_group">
-            <div class="chip selected" data-value="slim">Slim</div>
-            <div class="chip" data-value="fit">Fit</div>
-            <div class="chip" data-value="curvy">Curvy</div>
-            <div class="chip" data-value="thick">Thick</div>
-            <div class="chip" data-value="bbw">BBW</div>
-          </div>
-        </div>
-
-        <div class="field">
-          <label>Style</label>
-          <div class="chip-group" id="style_group">
-            <div class="chip selected" data-value="casual">Casual</div>
-            <div class="chip" data-value="elegant">Elegant</div>
-            <div class="chip" data-value="sporty">Sporty</div>
-            <div class="chip" data-value="edgy">Edgy</div>
-          </div>
-        </div>
-
-        <div class="field">
-          <label>Vibe</label>
-          <div class="chip-group" id="vibe_group">
-            <div class="chip selected" data-value="cute">Cute</div>
-            <div class="chip" data-value="romantic">Romantic</div>
-            <div class="chip" data-value="elegant">Elegant</div>
-            <div class="chip" data-value="playful">Playful</div>
-          </div>
-        </div>
-
-        <div class="portrait-box">
-          Portrait preview placeholder. Later here will be AI-generated image.
-          <div class="portrait-note">
-            You can regenerate portrait later in bot.
-          </div>
-        </div>
-      </div>
-
-      <div class="steps-footer">
-        <button id="next_btn" class="main">Next: Personality</button>
-      </div>
     </div>
 
-    <!-- STEP 2: PERSONALITY -->
-    <div id="step2">
-      <div class="section">
-        <h2>Personality</h2>
-
-        <div class="field">
-          <label>Character name</label>
-          <input id="name" type="text" placeholder="Luna, Sofia..." autocomplete="off" />
-        </div>
-
-        <div class="field">
-          <label>Traits (multiple)</label>
-          <div class="chip-group" id="traits_group">
-            <div class="chip selected" data-value="kind">Kind</div>
-            <div class="chip" data-value="playful">Playful</div>
-            <div class="chip" data-value="curious">Curious</div>
-            <div class="chip" data-value="confident">Confident</div>
-            <div class="chip" data-value="supportive">Supportive</div>
-            <div class="chip" data-value="witty">Witty</div>
-          </div>
-        </div>
-
-        <div class="field">
-          <label>Interests (multiple)</label>
-          <div class="chip-group" id="interests_group">
-            <div class="chip selected" data-value="music">Music</div>
-            <div class="chip" data-value="travel">Travel</div>
-            <div class="chip" data-value="romance">Romance</div>
-            <div class="chip" data-value="art">Art</div>
-            <div class="chip" data-value="gaming">Gaming</div>
-            <div class="chip" data-value="movies">Movies</div>
-            <div class="chip" data-value="fitness">Fitness</div>
-          </div>
-        </div>
-
-        <div class="field">
-          <label>Communication style</label>
-          <div class="chip-group" id="communication_group">
-            <div class="chip selected" data-value="soft">Soft</div>
-            <div class="chip" data-value="direct">Direct</div>
-            <div class="chip" data-value="playful">Playful</div>
-            <div class="chip" data-value="supportive">Supportive</div>
-          </div>
-        </div>
-
-        <div class="field">
-          <label>Flirt level</label>
-          <div class="chip-group" id="flirt_group">
-            <div class="chip selected" data-value="light">Light</div>
-            <div class="chip" data-value="medium">Medium</div>
-            <div class="chip" data-value="bold">Bold</div>
-          </div>
-        </div>
-
-        <div class="field">
-          <label>Behavior (multiple)</label>
-          <div class="chip-group" id="behavior_group">
-            <div class="chip selected" data-value="supportive">Supportive</div>
-            <div class="chip" data-value="warm">Warm</div>
-            <div class="chip" data-value="empathetic">Empathetic</div>
-            <div class="chip" data-value="protective">Protective</div>
-          </div>
-        </div>
-      </div>
-
-      <div class="steps-footer">
-        <button id="back_btn" class="main" type="button">‹ Back</button>
-        <button id="finish_btn" class="main" type="button">Create character</button>
-      </div>
-    </div>
-
-    <div id="error" class="error"></div>
-  </div>
-
-  <script>
-    const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
-
-    if (tg) {
-      tg.ready();
-      tg.expand();
-      if (typeof tg.isVersionAtLeast === "function" && tg.isVersionAtLeast("7.7")) {
-        tg.disableVerticalSwipes();
-      }
-    }
-
-    const errorBox = document.getElementById("error");
-    const step1El = document.getElementById("step1");
-    const step2El = document.getElementById("step2");
-    const stepsIndicator = document.getElementById("steps_indicator");
-
-    function showError(message, focusId) {
-      errorBox.textContent = message;
-      errorBox.style.display = "block";
-      if (focusId) {
-        const el = document.getElementById(focusId);
-        if (el) {
-          el.focus();
-          try {
-            el.scrollIntoView({ behavior: "smooth", block: "center" });
-          } catch (e) {}
-        }
-      }
-    }
-
-    function clearError() {
-      errorBox.textContent = "";
-      errorBox.style.display = "block";
-    }
-
-    function setupMultiChipGroup(groupId) {
-      const group = document.getElementById(groupId);
-      if (!group) return;
-      group.addEventListener("click", (e) => {
-        const chip = e.target.closest(".chip");
-        if (!chip) return;
-        chip.classList.toggle("selected");
-      });
-    }
-
-    function setupSingleChipGroup(groupId) {
-      const group = document.getElementById(groupId);
-      if (!group) return;
-      group.addEventListener("click", (e) => {
-        const chip = e.target.closest(".chip");
-        if (!chip) return;
-        Array.from(group.querySelectorAll(".chip.selected")).forEach((c) =>
-          c.classList.remove("selected")
-        );
-        chip.classList.add("selected");
-      });
-    }
-
-    function getSelectedValuesFromGroup(groupId) {
-      const group = document.getElementById(groupId);
-      if (!group) return [];
-      return Array.from(group.querySelectorAll(".chip.selected")).map((chip) => chip.dataset.value);
-    }
-
-    function getSingleValueFromGroup(groupId) {
-      const values = getSelectedValuesFromGroup(groupId);
-      return values.length ? values[0] : null;
-    }
-
-    // Setup groups
-    setupSingleChipGroup("partner_gender_group");
-    setupSingleChipGroup("age_group");
-    setupSingleChipGroup("hair_style_group");
-    setupSingleChipGroup("hair_color_group");
-    setupSingleChipGroup("ethnicity_group");
-    setupSingleChipGroup("body_group");
-    setupSingleChipGroup("style_group");
-    setupSingleChipGroup("vibe_group");
-
-    setupMultiChipGroup("traits_group");
-    setupMultiChipGroup("interests_group");
-    setupSingleChipGroup("communication_group");
-    setupSingleChipGroup("flirt_group");
-    setupMultiChipGroup("behavior_group");
-
-    // Step navigation
-    const nextBtn = document.getElementById("next_btn");
-    const backBtn = document.getElementById("back_btn");
-    const finishBtn = document.getElementById("finish_btn");
-
-    nextBtn.addEventListener("click", () => {
-      clearError();
-      step1El.classList.remove("active");
-      step2El.classList.add("active");
-      stepsIndicator.textContent = "Step 2 of 2 — Personality";
-    });
-
-    backBtn.addEventListener("click", () => {
-      clearError();
-      step2El.classList.remove("active");
-      step1El.classList.add("active");
-      stepsIndicator.textContent = "Step 1 of 2 — Appearance";
-    });
-
-    finishBtn.addEventListener("click", () => {
-      clearError();
-
-      const name = document.getElementById("name").value.trim();
-      if (!name) {
-        showError("Please enter character name.", "name");
-        return;
-      }
-
-      const gender = getSingleValueFromGroup("partner_gender_group") || "female";
-      const age = getSingleValueFromGroup("age_group") || "20-25";
-      const hairStyle = getSingleValueFromGroup("hair_style_group") || "long";
-      const hairColor = getSingleValueFromGroup("hair_color_group") || "dark";
-      const ethnicity = getSingleValueFromGroup("ethnicity_group") || "asian";
-      const body = getSingleValueFromGroup("body_group") || "slim";
-      const style = getSingleValueFromGroup("style_group") || "casual";
-      const vibe = getSingleValueFromGroup("vibe_group") || "cute";
-
-      const traits = getSelectedValuesFromGroup("traits_group");
-      const communication_style = getSingleValueFromGroup("communication_group") || "soft";
-      const flirt_level = getSingleValueFromGroup("flirt_group") || "light";
-      const interests = getSelectedValuesFromGroup("interests_group");
-      const behavior = getSelectedValuesFromGroup("behavior_group");
-
-      const seed = Math.floor(Math.random() * 999999999);
-
-      const finalPayload = {
-        name,
-        gender,
-        seed,
-        avatar_url: "",
-        appearance: {
-          age,
-          hair: `${hairStyle} ${hairColor}`.trim(),
-          ethnicity,
-          body_type: body,
-          style,
-          vibe
-        },
-        personality: {
-          traits,
-          communication_style,
-          flirt_level,
-          interests,
-          behavior
-        }
-      };
-
-      if (tg) {
-        tg.sendData(JSON.stringify(finalPayload));
-        tg.close();
-      } else {
-        console.log("Payload:", finalPayload);
-        showError("Test mode — open in Telegram to send to bot.");
-      }
-    });
-  </script>
+    <script src="app.js"></script>
 </body>
 </html>
